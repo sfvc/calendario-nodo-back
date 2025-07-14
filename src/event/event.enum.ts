@@ -1,0 +1,8 @@
+// src/event/event.enum.ts
+export enum EventStatus {
+  CANCELADO = 'CANCELADO',
+  FIN_DE_SEMANA = 'FIN_DE_SEMANA',
+  ESPERANDO_RTA = 'ESPERANDO_RTA',
+  INFO_SOLICITADA = 'INFO_SOLICITADA',
+  INTERNO_NODO = 'INTERNO_NODO'
+}
