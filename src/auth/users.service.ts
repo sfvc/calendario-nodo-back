@@ -7,6 +7,10 @@ import { PrismaService } from 'prisma/prisma.service';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
+  async findAll() {
+    return this.prisma.user.findMany();
+  }
+
   async createUser(createUserDto: CreateUserDto) {
     const { email, password, role } = createUserDto;
 
