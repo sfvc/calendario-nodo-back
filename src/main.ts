@@ -7,21 +7,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // 🔥 CORS correctamente configurado sin middleware extra
-  app.enableCors({
-    origin: [
-      "http://localhost:5173", // Tu frontend React
-      "http://localhost:3000", // Si necesitas el mismo puerto
-      "http://127.0.0.1:5173", // Alternativa localhost
-    ],
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"], // ✅ PATCH incluido
-    allowedHeaders: ["Content-Type", "Authorization", "Accept", "Origin", "X-Requested-With"],
-    credentials: true, // ✅ Coincide con tu frontend
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
-  })
-
-
+  app.enableCors();
   // Configurar vistas y Swagger
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
 

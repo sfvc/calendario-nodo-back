@@ -25,18 +25,26 @@ export class AuthService {
   // Crear el JWT y devolver los datos necesarios al frontend
   async login(user: any) {
     const payload = {
-      id: user.id,
+      sub: user.id,
       email: user.email,
       role: user.role,
     };
 
     return {
-      token: this.jwtService.sign(payload), // cambia "access_token" por "token"
+      token: this.jwtService.sign(payload),
       user: {
         id: user.id,
         email: user.email,
         role: user.role,
       },
     };
+  }
+
+  generateToken(user: { id: string; email: string; role: string }) {
+    return this.jwtService.sign({
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+    });
   }
 }

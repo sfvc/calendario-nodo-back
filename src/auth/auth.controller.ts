@@ -3,15 +3,18 @@ import {
   Post,
   Body,
   UnauthorizedException,
+  UseGuards,
+  Get,
+  Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { PrismaService } from 'prisma/prisma.service';
+import { JwtAuthGuard } from './jwt-auth.guard';
+import { RequestWithUser } from './request-with-user.interface';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly prisma: PrismaService,
   ) {}
 
   @Post('login')
@@ -22,15 +25,24 @@ export class AuthController {
       throw new UnauthorizedException('Credenciales inválidas');
     }
 
-    const token = await this.authService.login(user);
+    const data = await this.authService.login(user);
+    return data;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('refresh')
+  refreshToken(@Req() req: RequestWithUser) {
+    const user = req.user;
+
+    const payload = {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    };
 
     return {
-      token,
-      user: {
-        id: user.id,             // ✅ UUID que necesitas
-        email: user.email,
-        role: user.role,
-      },
+      token: this.authService.generateToken(payload),
+      user: payload,
     };
   }
 }

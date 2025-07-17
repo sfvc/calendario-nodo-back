@@ -24,8 +24,7 @@ export class EventService {
         color: data.color || '#3b82f6',
         allDay: data.allDay ?? false,
         status: data.status as any,
-        type: data.type as any,
-        user: { connect: { email: data.userId } },
+        user: { connect: { id: data.userId } },
 
         // Nuevos campos
         organizacion: data.organizacion,
@@ -54,8 +53,7 @@ export class EventService {
       color: event.color,
       allDay: event.allDay,
       status: event.status,
-      type: event.type,
-      userId: event.user.email,
+      userId: event.user.id,
 
       // Nuevos campos
       organizacion: event.organizacion,
@@ -72,15 +70,19 @@ export class EventService {
   }
 
   async update(id: string, data: UpdateEventDto) {
-    return this.prisma.event.update({
-      where: { id },
-      data: {
-        ...data,
-        status: data.status as any,
-        type: data.type as any,
-      },
-    });
-  }
+  const { start, end, userId, ...rest } = data;
+
+  return this.prisma.event.update({
+    where: { id },
+    data: {
+      ...(start && { start: new Date(start) }),
+      ...(end && { end: new Date(end) }),
+      ...(userId && { user: { connect: { id: userId } } }),
+      ...(rest.status && { status: rest.status as any }),
+      ...rest,
+    },
+  });
+}
 
   async remove(id: string) {
     return this.prisma.event.delete({ where: { id } });

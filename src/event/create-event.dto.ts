@@ -2,8 +2,6 @@ import { IsEnum, IsNotEmpty, IsOptional, IsString, IsInt, Min } from 'class-vali
 import { EventStatus } from './event.enum';
 
 export class CreateEventDto {
-
-  type: string;
   
   @IsNotEmpty()
   @IsString()
@@ -36,8 +34,7 @@ export class CreateEventDto {
   @IsString()
   userId: string;
 
-  // ✅ Nuevos campos
-
+  // Nuevos adicionales
   @IsOptional()
   @IsString()
   organizacion?: string;
