@@ -29,5 +29,6 @@ COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
 EXPOSE 3000
 
-CMD ["node", "dist/src/main.js"]
-
+# CMD ["node", "dist/src/main.js"]
+# Al final de tu Dockerfile
+CMD npx prisma migrate deploy && node dist/src/main.js
