@@ -3,7 +3,6 @@ FROM node:22.14.0-slim AS builder
 
 WORKDIR /app
 
-# Instalar dependencias necesarias para build (como prisma)
 RUN apt-get update -y && apt-get install -y openssl
 
 COPY . .
@@ -19,15 +18,17 @@ FROM node:22.14.0-slim
 
 WORKDIR /app
 
-# Solo instalar dependencias de producción
 COPY package.json package-lock.json* ./
 RUN npm install --omit=dev
 
 # Copiar build y Prisma Client generado
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/prisma ./prisma  
 
 EXPOSE 3000
 
-CMD ["node", "dist/src/main.js"]
+#CMD ["node", "dist/src/main.js"]
+CMD npx prisma migrate deploy && node dist/src/main.js
+#CMD ["node", "dist/src/main.js"]
 
