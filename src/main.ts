@@ -7,8 +7,11 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  app.enableCors();
-  // Configurar vistas y Swagger
+  app.enableCors({
+    origin: 'https://calendario.apps.cc.gob.ar/',
+    credentials: true,
+  });
+
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
 
   const config = new DocumentBuilder()
