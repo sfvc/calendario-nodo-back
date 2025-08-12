@@ -1,8 +1,7 @@
-import { IsEnum, IsNotEmpty, IsOptional, IsString, IsInt, Min } from 'class-validator';
-import { EventStatus } from './event.enum';
+// create-event.dto.ts
+import { IsNotEmpty, IsOptional, IsString, IsInt, Min } from 'class-validator';
 
 export class CreateEventDto {
-  
   @IsNotEmpty()
   @IsString()
   title: string;
@@ -26,21 +25,20 @@ export class CreateEventDto {
   @IsOptional()
   allDay?: boolean;
 
-  @IsOptional()
-  @IsEnum(Object.values(EventStatus))
-  status?: string;
+
+  @IsString()
+  status: string;
 
   @IsNotEmpty()
   @IsString()
   userId: string;
 
-  // Nuevos adicionales
   @IsOptional()
   @IsString()
   organizacion?: string;
 
   @IsOptional()
-  @IsString()
+  @IsInt()
   dia_y_horario?: string;
 
   @IsOptional()

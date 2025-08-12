@@ -24,7 +24,7 @@ model Event {
   end         DateTime
   color       String?
   allDay      Boolean     @default(false)
-  status      EventStatus @default(ESPERANDO_RTA)
+  status      String      // cambiar enum a string para aceptar cualquier estado dinámico
   userId      String
   user        User        @relation("UserEvents", fields: [userId], references: [id])
   createdAt   DateTime    @default(now())
@@ -32,22 +32,19 @@ model Event {
 
   // Nuevos campos
   organizacion     String?
-  dia_y_horario    String?
+  dia_y_horario String?
   cantidadPersonas Int?
   espacioUtilizar  String?
   requerimientos   String?
   cobertura        String?
 }
 
+model Eventoestado {
+  id      Int    @id @default(autoincrement())
+  nombre  String
+}
+
 enum Role {
   ADMIN
   USER
-}
-
-enum EventStatus {
-  CANCELADO
-  FIN_DE_SEMANA
-  ESPERANDO_RTA
-  INFO_SOLICITADA
-  INTERNO_NODO
 }

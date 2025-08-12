@@ -23,7 +23,7 @@ export class EventService {
         end: endDate,
         color: data.color || '#3b82f6',
         allDay: data.allDay ?? false,
-        status: data.status as any,
+        status: data.status,
         user: { connect: { id: data.userId } },
 
         // Nuevos campos
@@ -70,19 +70,30 @@ export class EventService {
   }
 
   async update(id: string, data: UpdateEventDto) {
-  const { start, end, userId, ...rest } = data;
+    const { start, end, userId, ...rest } = data;
 
-  return this.prisma.event.update({
-    where: { id },
-    data: {
-      ...(start && { start: new Date(start) }),
-      ...(end && { end: new Date(end) }),
-      ...(userId && { user: { connect: { id: userId } } }),
-      ...(rest.status && { status: rest.status as any }),
-      ...rest,
-    },
-  });
-}
+    function parseDateStartUTC(dateStr: string) {
+      const [year, month, day] = dateStr.split("-").map(Number);
+      // Construir la fecha en UTC, no en local
+      return new Date(Date.UTC(year, month - 1, day, 0, 0, 0));
+    }
+
+    function parseDateEndUTC(dateStr: string) {
+      const [year, month, day] = dateStr.split("-").map(Number);
+      return new Date(Date.UTC(year, month - 1, day, 23, 59, 59));
+    }
+
+    return this.prisma.event.update({
+      where: { id },
+      data: {
+        ...(start && { start: parseDateStartUTC(start) }),
+        ...(end && { end: parseDateEndUTC(end) }),
+        ...(userId && { user: { connect: { id: userId } } }),
+        ...(rest.status && { status: rest.status as any }),
+        ...rest,
+      },
+    });
+  }
 
   async remove(id: string) {
     return this.prisma.event.delete({ where: { id } });

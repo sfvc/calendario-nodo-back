@@ -96,3 +96,26 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+
+
+
+
+
+
+
+
+enum EventStatus {
+  CANCELADO
+  FIN_DE_SEMANA
+  ESPERANDO_RTA
+  INFO_SOLICITADA
+  INTERNO_NODO
+}
+
+
+model Eventoestado {
+  id      Int         @id @default(autoincrement())
+  nombre  String
+  status  EventStatus
+}
