@@ -15,7 +15,7 @@ RUN npm run build
 
 # Etapa 2: Producción
 FROM node:22.14.0-slim
-
+RUN apt-get update -y && apt-get install -y openssl
 WORKDIR /app
 
 COPY package.json package-lock.json* ./
