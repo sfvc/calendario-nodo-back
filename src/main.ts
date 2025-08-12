@@ -9,7 +9,7 @@ async function bootstrap() {
 
   app.enableCors();
   // Configurar vistas y Swagger
-
+  
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
 
   const config = new DocumentBuilder()
@@ -23,6 +23,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   await app.listen(3000);
+  console.log(`🚀 Aplicación corriendo en http://localhost:3000`);
   console.log(`📚 Swagger disponible en http://localhost:3000/api`);
 }
 bootstrap();
